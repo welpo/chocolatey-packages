@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>zola</id>
-    <version>0.17.2</version>
+    <version>0.18.0</version>
     <title>Zola</title>
     <authors>Vincent Prouillet, Zola contributors</authors>
 
@@ -27,7 +27,7 @@ This tool and the template engine it is using ([Tera](https://github.com/Keats/t
 ### List of features
 
 - Single binary
-- Syntax highlighting 
+- Syntax highlighting
 - Sass compilation
 - Assets co-location
 - (Basic currently) multilingual site suport
@@ -48,7 +48,25 @@ This tool and the template engine it is using ([Tera](https://github.com/Keats/t
     </description>
 
     <owners>welpo</owners>
-    <releaseNotes>## 0.17.2 (2023-03-19)
+    <releaseNotes>## 0.18.0 (2023-12-18)
+
+- Fix LFI in `zola serve`
+- Do not panic when root directory or config file not found
+- Fix base_url link attributes in atom templates
+- Use all authors for atom templates
+- Always sort page/section assets by filename
+- Allow setting attributes to lazy load all images from Config.toml
+- Fix HTML generated in class based highlighting with line numbers
+- Add a `replace_re` filter
+- Speed up `zola check` and only checks external links once, even if present in multiple languages
+- Add `search.index_format` into the serialized config in the templates
+- Add --force flag in `zola serve` if the directory is not empty
+- Add `ignored_static` to the config to ignore specific files from the static directory
+- Add Hungarian support for search
+- Actually remove codeblocks from search index
+- Fix taxonomies missing lang in sitemap
+
+## 0.17.2 (2023-03-19)
 
 - Fix one more invalid error with colocated directories
 - Revert "Recognize links starting with `www` as external for the link checker" as they won't be external links in practice
@@ -99,7 +117,7 @@ This will error if the same keys are defined multiple times
 - Allows using external URL for `redirect_to`
 - Recognize links starting with `www` as external for the link checker
     </releaseNotes>
-    
+
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
