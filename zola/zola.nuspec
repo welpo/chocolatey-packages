@@ -7,7 +7,7 @@
     <authors>Vincent Prouillet, Zola contributors</authors>
 
     <projectUrl>https://www.getzola.org/</projectUrl>
-    <iconUrl>https://avatars3.githubusercontent.com/u/43047029</iconUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/welpo/chocolatey-packages@main/zola/icon.png</iconUrl>
 
     <licenseUrl>https://github.com/getzola/zola/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
