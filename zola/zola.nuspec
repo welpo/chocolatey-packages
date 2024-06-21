@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>zola</id>
-    <version>0.18.0</version>
+    <version>0.19.0</version>
     <title>Zola</title>
     <authors>Vincent Prouillet, Zola contributors</authors>
 
@@ -48,7 +48,23 @@ This tool and the template engine it is using ([Tera](https://github.com/Keats/t
     </description>
 
     <owners>welpo</owners>
-    <releaseNotes>## 0.18.0 (2023-12-18)
+    <releaseNotes>## 0.19.0 (2024-06-20)
+
+- Updates the pulldown-cmark dependency to v0.11.0. This improves footnote handling, and may also introduce some minor behavior changes such as reducing the amount of unnecessary HTML-escaping of text content.
+- Add bottom footnotes with backreference option
+- Fix link check report inconsistency
+- Fix resizing for images with EXIF orientation
+- Add MIME type to get_image_metadata
+- Fix hot loading for config.toml in some cases
+- Add `render = false` capability to pages
+- Handle string dates in YAML front-matter
+- Add support for fuse.js search format
+- Added support for generating multiple kinds of feeds at once
+- Changed config options named `generate_feed` to `generate_feeds` (both in config.toml and in section front-matter)
+- Changed config option `feed_filename: String` to `feed_filenames: Vec&lt;String&gt;`
+- The config file no longer allows arbitrary fields outside the `[extra]` section
+
+## 0.18.0 (2023-12-18)
 
 - Fix LFI in `zola serve`
 - Do not panic when root directory or config file not found
