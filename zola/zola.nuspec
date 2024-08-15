@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>zola</id>
-    <version>0.19.1</version>
+    <version>0.19.2</version>
     <title>Zola</title>
     <authors>Vincent Prouillet, Zola contributors</authors>
 
@@ -48,7 +48,19 @@ This tool and the template engine it is using ([Tera](https://github.com/Keats/t
     </description>
 
     <owners>welpo</owners>
-    <releaseNotes>## 0.19.1 (2024-06-24)
+    <releaseNotes>
+## 0.19.2 (2024-08-15)
+
+- Fix some of YAML date parsing
+- Fix feed generation for languages not working in some cases (it was taking the value from the root of the config for
+feed_filenames)
+- Ignore `.bck` files in `zola serve`
+- Fix change monitoring on Windows
+- Allow disabling sitemap.xml and robots.txt generation
+- Fix shortcodes in inline HTML
+- Ignore code blocks in word count
+
+## 0.19.1 (2024-06-24)
 
 - Fix `config.generate_feeds` being still serialized as `config.generate_feed`. Both are available for now
 - Fix `zola serve` not reacting to changes on some OSes
