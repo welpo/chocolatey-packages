@@ -8,10 +8,11 @@ A repository for maintaining and distributing up-to-date Chocolatey packages.
 
 ### Installation
 
-All packages can be installed from the Chocolatey Community Repository. For example:
+Packages can be installed from the Chocolatey Community Repository:
 
 ```powershell
 choco install git-sumi
+choco install shuku
 choco install zola
 ```
 
@@ -28,13 +29,19 @@ choco install <package> --version="<version>" --source="." -fy
 
 Package: [community.chocolatey.org/packages/git-sumi](https://community.chocolatey.org/packages/git-sumi)
 
+### shuku
+
+[shuku](https://github.com/welpo/shuku) creates dialogue-only versions of media using subtitles, designed for language learners.
+
+Package: [community.chocolatey.org/packages/shuku](https://community.chocolatey.org/packages/shuku)
+
 ### Zola
 
 [Zola](https://www.getzola.org/) ([repo](https://github.com/getzola/zola/)) is a fast single-binary static site generator.
 
 Package: [community.chocolatey.org/packages/zola](https://community.chocolatey.org/packages/zola)
 
-**Fork Details:**
+**Fork details:**
 
 Originally hosted in [gsomix's ChocolateyPackages repository](https://github.com/gsomix/ChocolateyPackages), this package has been forked to continue active maintenance and community support, as the original repository is no longer being updated.
 

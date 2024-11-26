@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>shuku</id>
+    <version>0.0.3</version>
+    <title>shuku</title>
+    <authors>welpo</authors>
+
+    <projectUrl>https://github.com/welpo/shuku</projectUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/welpo/chocolatey-packages@main/shuku/icon.png</iconUrl>
+
+    <licenseUrl>https://github.com/welpo/shuku/blob/main/COPYING</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+
+    <projectSourceUrl>https://github.com/welpo/shuku</projectSourceUrl>
+    <docsUrl>https://github.com/welpo/shuku#readme</docsUrl>
+    <bugTrackerUrl>https://github.com/welpo/shuku/issues</bugTrackerUrl>
+    <packageSourceUrl>https://github.com/welpo/chocolatey-packages</packageSourceUrl>
+
+    <tags>shuku media subtitles dialogue-extraction audio-processing video-processing python language-learning</tags>
+    <summary>Shrink media to keep only the dialogue.</summary>
+    <description>Designed for language learners, shuku creates dialogue-only versions of media (show episodes, films) using subtitles. Useful to revisit content efficiently and improve comprehension.
+
+### Features
+
+- Create condensed audio, video, and subtitle files based on dialogue
+- Smart audio/subtitle track selection
+- Fuzzy matching for external subtitles
+- Pad subtitle timings for context and smoother transitions
+- Shift subtitle timing without extra tools
+- Skip unwanted subtitle lines (e.g., lyrics or sound effects)
+- Skip chapters (e.g., openings, previews, credits)
+- Smart metadata extraction (season, episode, title)
+- Logging and progress tracking
+- Generate LRC files from subtitles to use with music players
+- Batch processing of multiple files and directories
+
+Note: shuku — from 縮小 (しゅくしょう): "minification"</description>
+
+    <owners>welpo</owners>
+    <dependencies>
+      <dependency id="ffmpeg" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
