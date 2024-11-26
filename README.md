@@ -6,31 +6,33 @@ A repository for maintaining and distributing up-to-date Chocolatey packages.
 
 ## 📦 Packages
 
-### Zola
+### Installation
 
-[Zola](https://www.getzola.org/) is a fast single-binary static site generator.
-
-See the package on the Chocolatey Community Repository [here](https://community.chocolatey.org/packages/zola).
-
-**Installation:**
+All packages can be installed from the Chocolatey Community Repository. For example:
 
 ```powershell
+choco install git-sumi
 choco install zola
 ```
 
-**Pack and Install Locally:**
-
-To create the package, run:
+For local development, create and test packages with:
 
 ```powershell
-choco pack .\zola\zola.nuspec
+choco pack .\<package>\<package>.nuspec
+choco install <package> --version="<version>" --source="." -fy
 ```
 
-To install the created package:
+### git-sumi
 
-```powershell
-choco install zola --version="0.17.2" --source="." -fy
-```
+[git-sumi](https://sumi.rs) ([repo](https://github.com/welpo/git-sumi)) is the non-opinionated Rust-based commit message linter.
+
+Package: [community.chocolatey.org/packages/git-sumi](https://community.chocolatey.org/packages/git-sumi)
+
+### Zola
+
+[Zola](https://www.getzola.org/) ([repo](https://github.com/getzola/zola/)) is a fast single-binary static site generator.
+
+Package: [community.chocolatey.org/packages/zola](https://community.chocolatey.org/packages/zola)
 
 **Fork Details:**
 

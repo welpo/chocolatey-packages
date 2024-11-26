@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>git-sumi</id>
+    <version>0.0.9</version>
+    <title>git-sumi</title>
+    <authors>welpo</authors>
+
+    <projectUrl>https://sumi.rs</projectUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/welpo/chocolatey-packages@main/git-sumi/icon.png</iconUrl>
+
+    <licenseUrl>https://github.com/welpo/git-sumi/blob/main/LICENSE-MIT</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+
+    <projectSourceUrl>https://github.com/welpo/git-sumi</projectSourceUrl>
+    <docsUrl>https://sumi.rs/docs/</docsUrl>
+    <bugTrackerUrl>https://github.com/welpo/git-sumi/issues</bugTrackerUrl>
+    <packageSourceUrl>https://github.com/welpo/chocolatey-packages</packageSourceUrl>
+
+    <tags>git-sumi git commit-message conventional-commits commit-lint git-hooks pre-commit rust linter commit-validator</tags>
+    <summary>The non-opinionated Rust-based commit message linter</summary>
+    <description>Transform your commit practices with flexible linting for consistently high-quality Git commit messages that adhere to your project's standards.
+
+> git-sumi (墨, /sɯmi/) means "ink" in Japanese, especially the type used in traditional ink wash painting.
+
+### Main features
+
+- **Customizable rules**: Tailor git-sumi to each project's requirements. Easily configure [rules](https://sumi.rs/docs/rules) to enforce Conventional Commits, length limits, gitmoji usage, and more through a TOML file.
+
+- **Clear error reporting**: git-sumi's detailed error reporting makes fixing commit messages straightforward and educational.
+
+- **Seamless integration**: git-sumi is a single binary, making it easy to integrate into your existing workflow with minimal setup.
+
+### Documentation
+
+Visit [sumi.rs/docs](https://sumi.rs/docs) for comprehensive documentation, including:
+- [Quick setup](https://sumi.rs/docs/#quickstart)
+- [Configuration](https://sumi.rs/docs/configuration)
+- [Rules](https://sumi.rs/docs/rules)
+- [Examples](https://sumi.rs/docs/examples)
+- [Integration](https://sumi.rs/docs/integration)
+- [Frequently Asked Questions](https://sumi.rs/docs/faq)
+    </description>
+
+    <owners>welpo</owners>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
