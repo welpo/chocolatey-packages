@@ -1,0 +1,280 @@
+#!/usr/bin/env bash
+set -eu
+
+CURL_RETRIES=3
+
+cleanup() {
+    rm -rf "$TEMP_DIR"
+}
+
+exit_with_message() {
+    echo "$1" >&2
+    exit 1
+}
+
+DEPENDENCIES=(
+    "jq"
+    "curl"
+    "git"
+    "sed"
+    "awk"
+    "xmllint"
+    "sha256sum"
+)
+
+declare -A packages=(
+    ["git-sumi"]="welpo/git-sumi"
+    ["shuku"]="welpo/shuku"
+    ["zola"]="getzola/zola"
+)
+
+print_usage() {
+    echo "Usage: $0 [options]"
+    echo "Options:"
+    echo "  --all		Upgrade all packages (default)"
+    echo "  --help	Display this help message"
+    # Dynamically list all package options.
+    for package in "${!packages[@]}"; do
+        echo "  --$package	Upgrade $package"
+    done
+}
+
+check_dependency() {
+    if ! command -v "$1" &> /dev/null; then
+        exit_with_message "$1 is required but not installed."
+    fi
+}
+
+get_latest_version_github() {
+    local repo="$1"
+    local temp_file="${TEMP_DIR}/github_response.json"
+    if curl_with_retry "https://api.github.com/repos/${repo}/releases/latest" "$temp_file"; then
+        jq -r '.tag_name' "$temp_file" | sed -E 's/^v?//'
+    else
+        return 1
+    fi
+}
+
+curl_with_retry() {
+    local url="$1"
+    local output="$2"
+    local retries="$CURL_RETRIES"
+    local wait_time=5
+    local headers=()
+    if [ -n "${GITHUB_TOKEN:-}" ]; then
+        headers+=(-H "Authorization: token $GITHUB_TOKEN")
+    fi
+
+    while [ $retries -gt 0 ]; do
+        if curl -L --max-time 42 "${headers[@]}" "$url" -o "$output" --fail --silent; then
+            return 0
+        else
+            echo "Curl failed. Retrying in $wait_time seconds…"
+            sleep $wait_time
+            retries=$((retries - 1))
+            wait_time=$((wait_time * 2))
+        fi
+    done
+
+    echo "Failed to download after $CURL_RETRIES attempts." >&2
+    return 1
+}
+
+get_current_version() {
+    local package="$1"
+    local nuspec="${package}/${package}.nuspec"
+    if [ ! -f "$nuspec" ]; then
+        exit_with_message "Nuspec file not found: $nuspec"
+    fi
+    local version
+    version=$(xmllint --xpath "string(//*[local-name()='package']/*[local-name()='metadata']/*[local-name()='version'])" "$nuspec" 2>/dev/null)
+    local exit_code=$?
+    if [ $exit_code -ne 0 ]; then
+        exit_with_message "Failed to parse version from $nuspec"
+    fi
+    if [ -z "$version" ]; then
+        exit_with_message "No version found in $nuspec"
+    fi
+    echo "$version"
+}
+
+safe_file_manipulation() {
+    local file="$1"
+    local manipulation_command="$2"
+    local temp_file="${file}.tmp"
+    awk "${manipulation_command}" "$file" > "$temp_file"
+    mv "$temp_file" "$file"
+}
+
+update_nuspec_version() {
+    local package="$1"
+    local new_version="$2"
+    local nuspec="${package}/${package}.nuspec"
+    export new_version
+    safe_file_manipulation "$nuspec" '{gsub(/<version>[^<]*<\/version>/, "<version>" ENVIRON["new_version"] "</version>"); print}' new_version="$new_version"
+}
+
+update_checksum() {
+    local package="$1"
+    local version="$2"
+    local install_ps1="${package}/tools/chocolateyInstall.ps1"
+
+    case "$package" in
+        "git-sumi")
+            local url="https://github.com/welpo/git-sumi/releases/download/v${version}/git-sumi-x86_64-pc-windows-msvc.zip"
+            ;;
+        "shuku")
+            local url="https://github.com/welpo/shuku/releases/download/v${version}/shuku-x86_64-pc-windows-msvc.zip"
+            ;;
+        "zola")
+            local url="https://github.com/getzola/zola/releases/download/v${version}/zola-v${version}-x86_64-pc-windows-msvc.zip"
+            ;;
+        *)
+            echo "Unknown package: $package"
+            return 1
+            ;;
+    esac
+
+    # Download the file and calculate checksum.
+    local temp_file="${TEMP_DIR}/download.zip"
+    if curl_with_retry "$url" "$temp_file"; then
+        local checksum
+        checksum=$(sha256sum "$temp_file" | cut -d' ' -f1)
+        export new_checksum="$checksum"
+        safe_file_manipulation "$install_ps1" '
+  /checksum *=/ {
+    # Capture everything up to the equals sign, including spaces
+    match($0, /checksum *=/)
+    prefix = substr($0, 1, RLENGTH)
+    # Replace only what comes after the equals sign
+    sub(/= *'\''[^'\'']*'\''/, "= '\''" ENVIRON["new_checksum"] "'\''")
+    # Keep everything else unchanged
+  }
+  {print}
+'
+        echo "Updated checksum for $package to: $checksum"
+    else
+        echo "Failed to download $package for checksum calculation"
+        return 1
+    fi
+}
+
+upgrade_package() {
+    local package="$1"
+    local repo="$2"
+
+    if [ ! -d "$package" ]; then
+        exit_with_message "Package directory not found: $package"
+    fi
+
+    echo "Checking $package for updates…"
+
+    local current_version
+    current_version=$(get_current_version "$package")
+    local latest_version
+    latest_version=$(get_latest_version_github "$repo")
+
+    echo "Current version: $current_version"
+    echo "Latest version: $latest_version"
+
+    if [ "$current_version" = "$latest_version" ]; then
+        echo "$package is up to date. Skipping."
+        return 0
+    fi
+
+    echo "Updating $package to $latest_version"
+    update_nuspec_version "$package" "$latest_version"
+    update_checksum "$package" "$latest_version"
+
+    git add "${package}/${package}.nuspec" "${package}/tools/chocolateyInstall.ps1"
+    git commit -m "✨ feat: upgrade ${package} to v${latest_version}
+
+Package: https://community.chocolatey.org/packages/${package}
+Release: https://github.com/${repo}/releases/tag/v${latest_version}"
+
+    echo "Updated $package to version $latest_version"
+}
+
+main() {
+    # Initialize upgrade flags for each package.
+    declare -A upgrade_flags
+    for package in "${!packages[@]}"; do
+        upgrade_flags[$package]=false
+    done
+
+    # No args = default to upgrading all packages.
+    if [ $# -eq 0 ]; then
+        for package in "${!packages[@]}"; do
+            upgrade_flags[$package]=true
+        done
+    else
+        while [[ $# -gt 0 ]]; do
+            case $1 in
+                --all)
+                    for package in "${!packages[@]}"; do
+                        upgrade_flags[$package]=true
+                    done
+                    shift
+                    ;;
+                --help)
+                    print_usage
+                    exit 0
+                    ;;
+                *)
+                    # Strip the leading '--' from the argument.
+                    package="${1#--}"
+                    if [ -n "${packages[$package]:-}" ]; then
+                        upgrade_flags[$package]=true
+                        shift
+                    else
+                        echo "Unknown option: $1"
+                        print_usage
+                        exit 1
+                    fi
+                    ;;
+            esac
+        done
+    fi
+
+    # Check dependencies.
+    for dep in "${DEPENDENCIES[@]}"; do
+        check_dependency "$dep"
+    done
+
+    TEMP_DIR=$(mktemp -d)
+    trap cleanup EXIT
+
+    if ! git diff --cached --quiet; then
+        exit_with_message "There are staged changes. Unstage them before running this script."
+    fi
+
+    echo "Updating local repository…"
+    git fetch origin
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    echo "Current branch: $current_branch"
+
+    # Check if the branch exists on the remote.
+    if git ls-remote --exit-code --heads origin "$current_branch" >/dev/null 2>&1; then
+        # Branch exists on remote, compare with local.
+        local_commit=$(git rev-parse HEAD)
+        remote_commit=$(git rev-parse origin/"$current_branch")
+        if [ "$local_commit" = "$remote_commit" ]; then
+            echo "Branch is up to date with origin/$current_branch"
+        elif git merge-base --is-ancestor "$remote_commit" "$local_commit"; then
+            echo "Local branch is ahead of origin/$current_branch"
+        else
+            exit_with_message "Your local branch is behind origin/$current_branch. Pull the latest changes before running this script."
+        fi
+    else
+        echo "Branch $current_branch does not exist on remote. Assuming it's a new branch."
+    fi
+    echo "Local repository is ready."
+
+    for package in "${!packages[@]}"; do
+        if [ "${upgrade_flags[$package]}" = true ]; then
+            upgrade_package "$package" "${packages[$package]}"
+        fi
+    done
+}
+
+main "$@"

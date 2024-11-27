@@ -1,0 +1,80 @@
+name: Update Chocolatey packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "Package to update"
+        required: true
+        type: choice
+        options:
+          - all
+          - git-sumi
+          - shuku
+          - zola
+  schedule:
+    - cron: "52 3 * * *"  # Run at 03:52 AM UTC daily
+
+env:
+  BRANCH_PREFIX: feat/update
+
+jobs:
+  update-packages:
+    name: Update packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    strategy:
+      matrix:
+        package: ${{ github.event_name == 'schedule' && fromJson('["git-sumi", "shuku", "zola"]') || fromJson(format('["{0}"]', github.event.inputs.package)) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq curl git libxml2-utils
+
+      - name: Configure GPG key
+        run: |
+          echo -n ${{ secrets.GPG_PRIVATE_KEY }} | base64 --decode | gpg --import
+
+      - name: Configure Git
+        run: |
+          git config --global user.signingkey 33EACFE956484C3940BFEEDCE4EC28F8DFB57474
+          git config --global commit.gpgsign true
+          git config --global user.name "welpo"
+          git config --global user.email "welpo@users.noreply.github.com"
+
+      - name: Create and switch to new branch
+        run: |
+          git checkout -b ${{ env.BRANCH_PREFIX }}-${{ matrix.package }}
+
+      - name: Run update script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x scripts/update-packages
+          if [[ "${{ matrix.package }}" == "all" ]]; then
+              ./scripts/update-packages all
+          else
+              ./scripts/update-packages --${{ matrix.package }}
+          fi
+
+      - name: Push changes and create PR
+        run: |
+          if git diff --quiet HEAD origin/main; then
+            echo "No changes to push for ${{ matrix.package }}"
+            exit 0
+          fi
+          git push -u origin ${{ env.BRANCH_PREFIX }}-${{ matrix.package }}
+          gh pr create --fill \
+                       --base main \
+                       --head ${{ env.BRANCH_PREFIX }}-${{ matrix.package }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
