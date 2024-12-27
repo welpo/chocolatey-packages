@@ -46,7 +46,7 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.signingkey 33EACFE956484C3940BFEEDCE4EC28F8DFB57474
+          git config --global user.signingkey D3C944915B1A7B6B66553B20C50DCAE3B60ED3AC
           git config --global commit.gpgsign true
           git config --global user.name "welpo"
           git config --global user.email "welpo@users.noreply.github.com"
