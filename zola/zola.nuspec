@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>zola</id>
-    <version>0.19.2</version>
+    <version>0.20.0</version>
     <title>Zola</title>
     <authors>Vincent Prouillet, Zola contributors</authors>
 
@@ -48,6 +48,23 @@ This tool and the template engine it is using ([Tera](https://github.com/Keats/t
 
     <owners>welpo</owners>
     <releaseNotes>
+
+## 0.20.0 (2025-02-14)
+
+- Add `name` annotation for codeblock
+- Add argument to `zola serve` to watch additional directories
+- Disable JS minification when minifying HTML, it can result in broken JS
+- Add external links class option to Markdown configuration
+- Improve accessibility by nesting bottom footnotes inside footer element
+- Add pagination info to sections
+- Exclude paginated pages in sitemap by default
+- Allow treating a missing highlight language as error
+- Handle more editors with change detection in `zola serve`
+- Add argument to `zola serve` to write HTML files to disk (`--store-html`)
+- Add optional parsing of Markdown definition lists
+- Add avif support to the `resize_image` filter
+- Allow `insert_anchor_links` at config.toml level
+
 ## 0.19.2 (2024-08-15)
 
 - Fix some of YAML date parsing
