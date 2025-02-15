@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>zola</id>
-    <version>0.19.2</version>
+    <version>0.20.0</version>
     <title>Zola</title>
     <authors>Vincent Prouillet, Zola contributors</authors>
 
