@@ -69,7 +69,7 @@ curl_with_retry() {
         if curl -L --max-time 42 "${headers[@]}" "$url" -o "$output" --fail --silent; then
             return 0
         else
-            echo "Curl failed. Retrying in $wait_time seconds…"
+            echo "Curl failed. Retrying in $wait_time seconds…" >&2
             sleep $wait_time
             retries=$((retries - 1))
             wait_time=$((wait_time * 2))
@@ -96,6 +96,55 @@ get_current_version() {
         exit_with_message "No version found in $nuspec"
     fi
     echo "$version"
+}
+
+get_changelog_content() {
+    local repo="$1"
+    local version="$2"
+    local temp_file="${TEMP_DIR}/changelog.md"
+
+    if curl_with_retry "https://raw.githubusercontent.com/${repo}/master/CHANGELOG.md" "$temp_file"; then
+        # Extract content between the target version header and the next version header.
+        awk -v version="$version" '
+            BEGIN { found=0; printing=0 }
+            $0 ~ "^## " version " " { found=1; printing=1; next }
+            $0 ~ "^## " { if (printing) exit }
+            printing { print }
+            END { if (!found) exit 1 }
+        ' "$temp_file"
+    else
+        return 1
+    fi
+}
+
+update_nuspec_changelog() {
+    local package="$1"
+    local version="$2"
+    local repo="${packages[$package]}"
+    local nuspec="${package}/${package}.nuspec"
+
+    echo "Fetching changelog for ${package} v${version}..." >&2
+
+    local changelog_content
+    if ! changelog_content=$(get_changelog_content "$repo" "$version"); then
+        echo "Warning: Could not fetch changelog content. Manual update required." >&2
+        return 1
+    fi
+
+    # Escape XML special characters.
+    changelog_content=$(echo "$changelog_content" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g')
+
+    export changelog_content
+    safe_file_manipulation "$nuspec" '
+        /<releaseNotes>/ {
+            print $0
+            print ENVIRON["changelog_content"] "\n"
+            next
+        }
+        { print }
+    '
+
+    echo "Updated changelog in ${package}.nuspec" >&2
 }
 
 safe_file_manipulation() {
@@ -184,6 +233,7 @@ upgrade_package() {
 
     echo "Updating $package to $latest_version"
     update_nuspec_version "$package" "$latest_version"
+    update_nuspec_changelog "$package" "$latest_version"
     update_checksum "$package" "$latest_version"
 
     git add "${package}/${package}.nuspec" "${package}/tools/chocolateyInstall.ps1"
