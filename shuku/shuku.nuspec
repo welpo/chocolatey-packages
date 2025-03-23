@@ -16,6 +16,7 @@
     <docsUrl>https://github.com/welpo/shuku#readme</docsUrl>
     <bugTrackerUrl>https://github.com/welpo/shuku/issues</bugTrackerUrl>
     <packageSourceUrl>https://github.com/welpo/chocolatey-packages</packageSourceUrl>
+    <releaseNotes>https://github.com/welpo/shuku/releases</releaseNotes>
 
     <tags>shuku media subtitles dialogue-extraction audio-processing video-processing python language-learning</tags>
     <summary>Shrink media to keep only the dialogue.</summary>
@@ -39,7 +40,7 @@ Note: shuku — from 縮小 (しゅくしょう): "minification"</description>
 
     <owners>welpo</owners>
     <dependencies>
-      <dependency id="ffmpeg" />
+      <dependency id="ffmpeg" version="7.0" />
     </dependencies>
   </metadata>
   <files>
