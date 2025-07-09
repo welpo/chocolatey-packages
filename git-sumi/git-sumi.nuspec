@@ -20,7 +20,6 @@
     <tags>git-sumi git commit-message conventional-commits commit-lint git-hooks pre-commit rust linter commit-validator</tags>
     <summary>The non-opinionated Rust-based commit message linter</summary>
     <description>Transform your commit practices with flexible linting for consistently high-quality Git commit messages that adhere to your project's standards.
-    <releaseNotes>https://github.com/welpo/git-sumi/releases</releaseNotes>
 
 > git-sumi (墨, /sɯmi/) means "ink" in Japanese, especially the type used in traditional ink wash painting.
 
@@ -42,6 +41,7 @@ Visit [sumi.rs/docs](https://sumi.rs/docs) for comprehensive documentation, incl
 - [Integration](https://sumi.rs/docs/integration)
 - [Frequently Asked Questions](https://sumi.rs/docs/faq)
     </description>
+    <releaseNotes>https://github.com/welpo/git-sumi/releases</releaseNotes>
 
     <owners>welpo</owners>
   </metadata>
