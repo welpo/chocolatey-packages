@@ -51,7 +51,21 @@ jobs:
           git config --global user.name "welpo"
           git config --global user.email "welpo@users.noreply.github.com"
 
+      - name: Check for existing PR
+        id: check_pr
+        run: |
+          if gh pr list --head "${{ env.BRANCH_PREFIX }}-${{ matrix.package }}-*" --json number | jq '.[0]' | grep -q .; then
+            echo "An open PR already exists for ${{ matrix.package }}."
+            echo "pr_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "No open PR found for ${{ matrix.package }}."
+            echo "pr_exists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create and switch to new branch
+        if: steps.check_pr.outputs.pr_exists == 'false'
         run: |
           timestamp=$(date +%Y%m%d-%H%M%S)
           branch_name="${{ env.BRANCH_PREFIX }}-${{ matrix.package }}-${timestamp}"
@@ -59,6 +73,7 @@ jobs:
           git checkout -b ${branch_name}
 
       - name: Run update script
+        if: steps.check_pr.outputs.pr_exists == 'false'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -70,6 +85,7 @@ jobs:
           fi
 
       - name: Push changes and create PR
+        if: steps.check_pr.outputs.pr_exists == 'false'
         run: |
           if git diff --quiet HEAD origin/main; then
             echo "No changes to push for ${{ matrix.package }}"
