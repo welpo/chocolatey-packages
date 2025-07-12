@@ -28,7 +28,7 @@ jobs:
       pull-requests: write
     strategy:
       matrix:
-        package: ${{ github.event_name == 'schedule' && fromJson('["git-sumi", "shuku", "zola"]') || fromJson(format('["{0}"]', github.event.inputs.package)) }}
+        package: ${{ github.event_name == 'schedule' && fromJson('["git-sumi", "shuku", "zola"]') || (github.event.inputs.package == 'all' && fromJson('["git-sumi", "shuku", "zola"]')) || fromJson(format('["{0}"]', github.event.inputs.package)) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -54,7 +54,8 @@ jobs:
       - name: Check for existing PR
         id: check_pr
         run: |
-          if gh pr list --head "${{ env.BRANCH_PREFIX }}-${{ matrix.package }}-*" --json number | jq -e '.[0]' > /dev/null; then
+          prefix="${{ env.BRANCH_PREFIX }}-${{ matrix.package }}-"
+          if gh pr list --json number,headRefName | jq -e --arg prefix "$prefix" '.[] | select(.headRefName | startswith($prefix))' > /dev/null; then
             echo "An open PR already exists for ${{ matrix.package }}."
             echo "pr_exists=true" >> $GITHUB_OUTPUT
           else
@@ -78,11 +79,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod +x scripts/update-packages
-          if [[ "${{ matrix.package }}" == "all" ]]; then
-              ./scripts/update-packages all
-          else
-              ./scripts/update-packages --${{ matrix.package }}
-          fi
+          ./scripts/update-packages --${{ matrix.package }}
 
       - name: Push changes and create PR
         if: steps.check_pr.outputs.pr_exists == 'false'
