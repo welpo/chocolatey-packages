@@ -41,7 +41,9 @@ Visit [sumi.rs/docs](https://sumi.rs/docs) for comprehensive documentation, incl
 - [Integration](https://sumi.rs/docs/integration)
 - [Frequently Asked Questions](https://sumi.rs/docs/faq)
     </description>
-    <releaseNotes>https://github.com/welpo/git-sumi/releases</releaseNotes>
+    <releaseNotes>
+    https://github.com/welpo/git-sumi/releases
+    </releaseNotes>
 
     <owners>welpo</owners>
   </metadata>
