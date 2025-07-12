@@ -54,7 +54,7 @@ jobs:
       - name: Check for existing PR
         id: check_pr
         run: |
-          if gh pr list --head "${{ env.BRANCH_PREFIX }}-${{ matrix.package }}-*" --json number | jq -e '.[0]' > /dev/null; then
+          if gh pr list --json number,headRefName | jq -e '.[] | select(.headRefName | startswith("${{ env.BRANCH_PREFIX }}-${{ matrix.package }}-"))' > /dev/null; then
             echo "An open PR already exists for ${{ matrix.package }}."
             echo "pr_exists=true" >> $GITHUB_OUTPUT
           else
@@ -79,7 +79,7 @@ jobs:
         run: |
           chmod +x scripts/update-packages
           if [[ "${{ matrix.package }}" == "all" ]]; then
-              ./scripts/update-packages all
+              ./scripts/update-packages --all
           else
               ./scripts/update-packages --${{ matrix.package }}
           fi
