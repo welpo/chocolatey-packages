@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>git-sumi</id>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <title>git-sumi</title>
     <authors>welpo</authors>
 
@@ -42,6 +42,19 @@ Visit [sumi.rs/docs](https://sumi.rs/docs) for comprehensive documentation, incl
 - [Frequently Asked Questions](https://sumi.rs/docs/faq)
     </description>
     <releaseNotes>
+
+### ✨ Features
+
+- Add option to remove header pattern before validation ([#305](https://github.com/welpo/git-sumi/issues/305)) by [@welpo](https://github.com/welpo)
+
+### 🔧 Miscellaneous tasks
+
+- Fix test typos ([#280](https://github.com/welpo/git-sumi/issues/280)) by [@kianmeng](https://github.com/kianmeng)
+
+### 👥 New contributors
+
+🫶 [@kianmeng](https://github.com/kianmeng) made their first contribution in [#280](https://github.com/welpo/git-sumi/pull/280)
+
 
 ### ✨ Features
 
