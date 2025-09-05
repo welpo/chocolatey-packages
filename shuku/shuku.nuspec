@@ -16,7 +16,7 @@
     <docsUrl>https://github.com/welpo/shuku#readme</docsUrl>
     <bugTrackerUrl>https://github.com/welpo/shuku/issues</bugTrackerUrl>
     <packageSourceUrl>https://github.com/welpo/chocolatey-packages</packageSourceUrl>
-    <releaseNotes>https://github.com/welpo/shuku/releases</releaseNotes>
+    <releaseNotes>https://github.com/welpo/shuku/releases
 
 ### 🐛 Bug fixes
 
@@ -25,7 +25,7 @@
 ### ♻️ Refactor
 
 - Improve keyboard interruption handling ([f5de092](https://github.com/welpo/shuku/commit/f5de092bac9c0e2a1c34f7f9bb430792bad9438f)) by [@welpo](https://github.com/welpo)
-
+</releaseNotes>
 
     <tags>shuku media subtitles dialogue-extraction audio-processing video-processing python language-learning</tags>
     <summary>Shrink media to keep only the dialogue.</summary>
