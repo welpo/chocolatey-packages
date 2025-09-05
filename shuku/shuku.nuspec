@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>shuku</id>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <title>shuku</title>
     <authors>welpo</authors>
 
@@ -16,7 +16,16 @@
     <docsUrl>https://github.com/welpo/shuku#readme</docsUrl>
     <bugTrackerUrl>https://github.com/welpo/shuku/issues</bugTrackerUrl>
     <packageSourceUrl>https://github.com/welpo/chocolatey-packages</packageSourceUrl>
-    <releaseNotes>https://github.com/welpo/shuku/releases</releaseNotes>
+    <releaseNotes>https://github.com/welpo/shuku/releases
+
+### 🐛 Bug fixes
+
+- Correct season/episode metadata extraction ([0bb6022](https://github.com/welpo/shuku/commit/0bb602217577c43a914d22d6c008b1b42923bf39)) by [@welpo](https://github.com/welpo)
+
+### ♻️ Refactor
+
+- Improve keyboard interruption handling ([f5de092](https://github.com/welpo/shuku/commit/f5de092bac9c0e2a1c34f7f9bb430792bad9438f)) by [@welpo](https://github.com/welpo)
+</releaseNotes>
 
     <tags>shuku media subtitles dialogue-extraction audio-processing video-processing python language-learning</tags>
     <summary>Shrink media to keep only the dialogue.</summary>
