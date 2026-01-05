@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>shuku</id>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
     <title>shuku</title>
     <authors>welpo</authors>
 
@@ -17,6 +17,23 @@
     <bugTrackerUrl>https://github.com/welpo/shuku/issues</bugTrackerUrl>
     <packageSourceUrl>https://github.com/welpo/chocolatey-packages</packageSourceUrl>
     <releaseNotes>https://github.com/welpo/shuku/releases
+
+### ✨ Features
+
+- Support cover art in condensed audio ([#106](https://github.com/welpo/shuku/issues/106)) by @welpo
+
+### 🐛 Bug fixes
+
+- Gracefully handle KeyboardInterrupt ([0802d9f](https://github.com/welpo/shuku/commit/0802d9f206b9317208a07a0e33f157060cff22f5)) by @welpo
+
+### 📝 Documentation
+
+- Replace Black with Ruff ([20dbe6f](https://github.com/welpo/shuku/commit/20dbe6fbf2e9be125cc8e86aaeaeb0be5d5e9d0a)) by @welpo
+
+### 🔧 Miscellaneous tasks
+
+- Improve error for unsupported subtitle formats ([4aa9b80](https://github.com/welpo/shuku/commit/4aa9b8021139118cd8790bc3cafdcdd1f0dbf011)) by @welpo
+
 
 ### 🐛 Bug fixes
 
