@@ -112,7 +112,7 @@ get_changelog_content() {
                 BEGIN { found=0; printing=0 }
                 $0 ~ "^## " version " " ||
                 $0 ~ "^## \\[" version "\\]" ||
-                $0 ~ "^## v" version { found=1; printing=1; next }
+                $0 ~ "^## v" version { found=1; printing=1; gsub(/\[/, ""); gsub(/\]\([^)]*\)/, ""); print; next }
                 $0 ~ "^## " { if (printing) exit }
                 printing { print }
                 END { if (!found) exit 1 }
@@ -149,11 +149,19 @@ update_nuspec_changelog() {
 
     export changelog_content
     safe_file_manipulation "$nuspec" '
+        BEGIN { skip=0 }
         /<releaseNotes>/ {
-            print $0
-            print ENVIRON["changelog_content"] "\n"
+            print
+            print ENVIRON["changelog_content"]
+            skip=1
             next
         }
+        /<\/releaseNotes>/ {
+            skip=0
+            print
+            next
+        }
+        skip { next }
         { print }
     '
 

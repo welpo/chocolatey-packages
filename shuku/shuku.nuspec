@@ -16,8 +16,7 @@
     <docsUrl>https://github.com/welpo/shuku#readme</docsUrl>
     <bugTrackerUrl>https://github.com/welpo/shuku/issues</bugTrackerUrl>
     <packageSourceUrl>https://github.com/welpo/chocolatey-packages</packageSourceUrl>
-    <releaseNotes>https://github.com/welpo/shuku/releases
-
+    <releaseNotes>
 ### ✨ Features
 
 - Support cover art in condensed audio ([#106](https://github.com/welpo/shuku/issues/106)) by @welpo
@@ -33,16 +32,7 @@
 ### 🔧 Miscellaneous tasks
 
 - Improve error for unsupported subtitle formats ([4aa9b80](https://github.com/welpo/shuku/commit/4aa9b8021139118cd8790bc3cafdcdd1f0dbf011)) by @welpo
-
-
-### 🐛 Bug fixes
-
-- Correct season/episode metadata extraction ([0bb6022](https://github.com/welpo/shuku/commit/0bb602217577c43a914d22d6c008b1b42923bf39)) by [@welpo](https://github.com/welpo)
-
-### ♻️ Refactor
-
-- Improve keyboard interruption handling ([f5de092](https://github.com/welpo/shuku/commit/f5de092bac9c0e2a1c34f7f9bb430792bad9438f)) by [@welpo](https://github.com/welpo)
-</releaseNotes>
+    </releaseNotes>
 
     <tags>shuku media subtitles dialogue-extraction audio-processing video-processing python language-learning</tags>
     <summary>Shrink media to keep only the dialogue.</summary>
