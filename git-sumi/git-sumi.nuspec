@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>git-sumi</id>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <title>git-sumi</title>
     <authors>welpo</authors>
 
@@ -42,17 +42,31 @@ Visit [sumi.rs/docs](https://sumi.rs/docs) for comprehensive documentation, incl
 - [Frequently Asked Questions](https://sumi.rs/docs/faq)
     </description>
     <releaseNotes>
+## 0.3.0 - 2026-02-14
+
 ### ✨ Features
 
-- Add option to remove header pattern before validation ([#305](https://github.com/welpo/git-sumi/issues/305)) by [@welpo](https://github.com/welpo)
+- Validate commit ranges ([#382](https://github.com/welpo/git-sumi/issues/382)) by [@welpo](https://github.com/welpo)
+
+### 🐛 Bug fixes
+
+- *(pre-commit)* Fix pre-commit hook ([#352](https://github.com/welpo/git-sumi/issues/352)) by [@npetzall](https://github.com/npetzall) and [@welpo](https://github.com/welpo)
+- Correctly handle verbose git commits ([#372](https://github.com/welpo/git-sumi/issues/372)) by [@marovira](https://github.com/marovira) and [@welpo](https://github.com/welpo)
+
+### 📝 Documentation
+
+- Add mise installation instructions ([9db5fa0](https://github.com/welpo/git-sumi/commit/9db5fa064a4ad4f56faecee93067f2be127b542f)) by [@welpo](https://github.com/welpo)
 
 ### 🔧 Miscellaneous tasks
 
-- Fix test typos ([#280](https://github.com/welpo/git-sumi/issues/280)) by [@kianmeng](https://github.com/kianmeng)
+- *(renovate)* Update config ([21e2415](https://github.com/welpo/git-sumi/commit/21e2415e17c389429b952dbe8ffb2cce1a56f977)) by [@welpo](https://github.com/welpo)
+- Fix renovate link ([d7215f0](https://github.com/welpo/git-sumi/commit/d7215f0d7f5b0464f2028a8f01c728c64c3667e5)) by [@welpo](https://github.com/welpo)
 
 ### 👥 New contributors
 
-🫶 [@kianmeng](https://github.com/kianmeng) made their first contribution in [#280](https://github.com/welpo/git-sumi/pull/280)
+🫶 [@marovira](https://github.com/marovira) made their first contribution in [#372](https://github.com/welpo/git-sumi/pull/372)
+
+🫶 [@npetzall](https://github.com/npetzall) made their first contribution in [#352](https://github.com/welpo/git-sumi/pull/352)
     </releaseNotes>
 
     <owners>welpo</owners>
