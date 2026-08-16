@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>shuku</id>
-    <version>0.0.9</version>
+    <version>0.0.10</version>
     <title>shuku</title>
     <authors>welpo</authors>
 
@@ -17,16 +17,11 @@
     <bugTrackerUrl>https://github.com/welpo/shuku/issues</bugTrackerUrl>
     <packageSourceUrl>https://github.com/welpo/chocolatey-packages</packageSourceUrl>
     <releaseNotes>
-## 0.0.9 - 2026-08-13
+## 0.0.10 - 2026-08-16
 
-### 🐛 Bug fixes
+### 🔧 Miscellaneous tasks
 
-- *(cli)* Disambiguate identical subtitle tracks ([c0eed41](https://github.com/welpo/shuku/commit/c0eed410fd50a56a2b2298bba13133090f5c3b86)) by [@welpo](https://github.com/welpo)
-- *(cli)* Avoid signs/songs tracks set as default ([75ccd88](https://github.com/welpo/shuku/commit/75ccd88045603982c1b7886b46ab514d3a31939e)) by [@welpo](https://github.com/welpo)
-- *(cli)* Prefer non-forced subtitle tracks ([651c63f](https://github.com/welpo/shuku/commit/651c63fad4b9434a32c14090150a657f519a0b6e)) by [@welpo](https://github.com/welpo)
-- *(cli)* Drop subtitle lines with unusable timings ([eca1a3a](https://github.com/welpo/shuku/commit/eca1a3a8abc5c7d127acb488ee613f6f05adef43)) by [@welpo](https://github.com/welpo)
-- *(cli)* Apply subtitle delay before filtering lines ([f086388](https://github.com/welpo/shuku/commit/f08638858fc35970eec96b8ed303cb2396ebf6bb)) by [@welpo](https://github.com/welpo)
-- *(cli)* Skip commented-out ASS/SSA lines ([0f2480b](https://github.com/welpo/shuku/commit/0f2480b3cbd1d9f4e79039bc15d27fdbeb1c940d)) by [@welpo](https://github.com/welpo)
+- *(cli)* Drop 'v' prefix from --version output ([eafa6bb](https://github.com/welpo/shuku/commit/eafa6bb905340e134182ac3826bfa8d39ede1b07)) by [@welpo](https://github.com/welpo)
     </releaseNotes>
 
     <tags>shuku media subtitles dialogue-extraction audio-processing video-processing python language-learning</tags>
