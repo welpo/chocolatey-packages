@@ -1,0 +1,71 @@
+name: Publish packages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: pwsh
+
+concurrency:
+  group: publish-packages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish ${{ matrix.package }}
+    runs-on: windows-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        package: [git-sumi, shuku, zola]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read version from nuspec
+        id: nuspec
+        run: |
+          [xml]$nuspec = Get-Content "${{ matrix.package }}/${{ matrix.package }}.nuspec"
+          $version = $nuspec.package.metadata.version
+          if (-not $version) { throw "no version in ${{ matrix.package }}.nuspec" }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Check whether this version is already published
+        id: published
+        run: |
+          $url = "https://community.chocolatey.org/api/v2/Packages(Id='${{ matrix.package }}',Version='${{ steps.nuspec.outputs.version }}')"
+          $response = Invoke-WebRequest -Uri $url -UseBasicParsing -SkipHttpErrorCheck
+          switch ($response.StatusCode) {
+            200 { $published = 'true' }
+            404 { $published = 'false' }
+            default { throw "unexpected status $($response.StatusCode) from $url" }
+          }
+          Write-Host "${{ matrix.package }} ${{ steps.nuspec.outputs.version }} published: $published"
+          "published=$published" >> $env:GITHUB_OUTPUT
+
+      - name: Pack
+        if: steps.published.outputs.published == 'false'
+        run: choco pack "${{ matrix.package }}/${{ matrix.package }}.nuspec" --outputdirectory .
+
+      - name: Install
+        if: steps.published.outputs.published == 'false'
+        run: choco install "${{ matrix.package }}" --version="${{ steps.nuspec.outputs.version }}" --source="$PWD;https://community.chocolatey.org/api/v2/" -y --no-progress
+
+      - name: Test
+        if: steps.published.outputs.published == 'false'
+        run: ./${{ matrix.package }}/test.ps1 -ExpectedVersion "${{ steps.nuspec.outputs.version }}"
+
+      - name: Uninstall
+        if: steps.published.outputs.published == 'false'
+        run: choco uninstall "${{ matrix.package }}" -y
+
+      - name: Push to the community repository
+        if: steps.published.outputs.published == 'false'
+        run: choco push "${{ matrix.package }}.${{ steps.nuspec.outputs.version }}.nupkg" --source="https://push.chocolatey.org/" --api-key="${{ secrets.CHOCO_API_KEY }}"

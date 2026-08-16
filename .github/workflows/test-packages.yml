@@ -1,0 +1,54 @@
+name: Test packages
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "Package to test"
+        required: true
+        default: all
+        type: choice
+        options:
+          - all
+          - git-sumi
+          - shuku
+          - zola
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  test:
+    name: Test ${{ matrix.package }}
+    runs-on: windows-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.package != 'all') && fromJson(format('["{0}"]', github.event.inputs.package)) || fromJson('["git-sumi", "shuku", "zola"]') }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read version from nuspec
+        id: nuspec
+        run: |
+          [xml]$nuspec = Get-Content "${{ matrix.package }}/${{ matrix.package }}.nuspec"
+          $version = $nuspec.package.metadata.version
+          if (-not $version) { throw "no version in ${{ matrix.package }}.nuspec" }
+          Write-Host "version=$version"
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Pack
+        run: choco pack "${{ matrix.package }}/${{ matrix.package }}.nuspec" --outputdirectory .
+
+      - name: Install
+        run: choco install "${{ matrix.package }}" --version="${{ steps.nuspec.outputs.version }}" --source="$PWD;https://community.chocolatey.org/api/v2/" -y --no-progress
+
+      - name: Test
+        run: ./${{ matrix.package }}/test.ps1 -ExpectedVersion "${{ steps.nuspec.outputs.version }}"
+
+      - name: Uninstall
+        run: choco uninstall "${{ matrix.package }}" -y
