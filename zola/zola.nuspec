@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>zola</id>
-    <version>0.23.3</version>
+    <version>0.23.4</version>
     <title>Zola</title>
     <authors>Vincent Prouillet, Zola contributors</authors>
 
@@ -48,16 +48,17 @@ This tool and the template engine it is using ([Tera](https://github.com/Keats/t
 
     <owners>welpo</owners>
     <releaseNotes>
-## 0.23.3 (2026-08-11)
+## 0.23.4 (2026-08-20)
 
-- Fix Windows issues
-- Fix panic in section templating
-- Fix feed URL for non-default languages
-- Fix colocated assets for sections not being copied in some cases
-- Fix config merge errors with multilingual sites
-- Now error when taxonomies terms slugify to an empty string
-- Fix language region (eg en-US, zh-Hans) for elasticlunr search backend 
-- Fix search language generation for languages not working if default lang search is disabled
+- Fix another `get_url` bug adding a trailing slash for non default language
+- Fix `index.&lt;default_language&gt;.md` paths collision
+- Fix sitemap `&lt;lastmod&gt;` emitting invalid dates (eg a datetime without a timezone) for sitemap validation
+- Fix `get_url` returning links to pages/sections with `render = false`
+- Various fixes with `zola serve` -u/-i flags
+- Date sorting is now using descending permalink as tie breaker instead of ascending to match date sorting
+- Cache result of `get_url(..., cachebust=true)`
+- Do not error when setting heading ids in content with a Tera error
+- Properly merge taxonomies terms when needed after slugification
     </releaseNotes>
 
   </metadata>
