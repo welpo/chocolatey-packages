@@ -20,14 +20,41 @@ defaults:
     shell: pwsh
 
 jobs:
+  select:
+    name: Select packages
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.select.outputs.packages }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Select packages to test
+        id: select
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            changed=$(git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}")
+          else
+            changed=$(ls -d */)
+          fi
+          packages=$(printf '%s\n' "$changed" | cut -d/ -f1 | sort -u \
+            | jq -Rsc 'split("\n") | map(select(test("^(git-sumi|shuku|zola)$")))')
+          echo "Testing: $packages"
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+
   test:
     name: Test ${{ matrix.package }}
+    needs: select
+    if: needs.select.outputs.packages != '[]'
     runs-on: windows-latest
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
-        package: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.package != 'all') && fromJson(format('["{0}"]', github.event.inputs.package)) || fromJson('["git-sumi", "shuku", "zola"]') }}
+        package: ${{ fromJson(needs.select.outputs.packages) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
