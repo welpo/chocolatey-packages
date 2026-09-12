@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>zola</id>
-    <version>0.23.4</version>
+    <version>0.23.5</version>
     <title>Zola</title>
     <authors>Vincent Prouillet, Zola contributors</authors>
 
@@ -48,17 +48,15 @@ This tool and the template engine it is using ([Tera](https://github.com/Keats/t
 
     <owners>welpo</owners>
     <releaseNotes>
-## 0.23.4 (2026-08-20)
+## 0.23.5 (2026-09-11)
 
-- Fix another `get_url` bug adding a trailing slash for non default language
-- Fix `index.&lt;default_language&gt;.md` paths collision
-- Fix sitemap `&lt;lastmod&gt;` emitting invalid dates (eg a datetime without a timezone) for sitemap validation
-- Fix `get_url` returning links to pages/sections with `render = false`
-- Various fixes with `zola serve` -u/-i flags
-- Date sorting is now using descending permalink as tie breaker instead of ascending to match date sorting
-- Cache result of `get_url(..., cachebust=true)`
-- Do not error when setting heading ids in content with a Tera error
-- Properly merge taxonomies terms when needed after slugification
+- Fix `text_direction` not being wired up correctly and causing compilation errors when used in templates
+- Fix `get_taxonomy_url` in templated content not finding anything
+- Fix `get_taxonomy`, `get_taxonomy_term` and `get_taxonomy_url` not finding taxonomies via names if they differ when slugified
+- Update tera, adding back `locale` param to the `date` filter
+- Fix dark borders around PNG when resizing images
+- Cache results of `get_hash`
+- Rebuild whole site on any template change in `zola serve`, a smarter reload will come later
     </releaseNotes>
 
   </metadata>
